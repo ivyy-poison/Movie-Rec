@@ -1,8 +1,14 @@
+import {useState} from "react"
+
 export default function SignUpForm() {
+
+    const [username, setUsername] = useState("")
+    const [password, setPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
+    const [email, setEmail] = useState("")
     
     return (
       <>
-        <h1>hello world</h1>
         <div className="min-h-screen bg-gray-100">
             <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
                 <div className="w-full max-w-md space-y-8">
@@ -34,7 +40,8 @@ export default function SignUpForm() {
                                     id="username"
                                     name="username"
                                     type="username"
-                                    autoComplete="username"
+                                    value={username}
+                                    onChange = {(e) => setUsername(e.target.value)}
                                     required
                                     className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                     placeholder="Username"
@@ -48,7 +55,8 @@ export default function SignUpForm() {
                                     id="email-address"
                                     name="email"
                                     type="email"
-                                    autoComplete="email"
+                                    value={email}
+                                    onChange = {(e) => setEmail(e.target.value)}
                                     required
                                     className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                     placeholder="Email address"
@@ -62,7 +70,8 @@ export default function SignUpForm() {
                                     id="password"
                                     name="password"
                                     type="password"
-                                    
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     required
                                     className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                     placeholder="Password"
@@ -75,8 +84,9 @@ export default function SignUpForm() {
                                 <input
                                     id="confirm-password"
                                     name="confirm-password"
-                                    type="confirm-password"
-                                    
+                                    type="password"
+                                    value={confirmPassword}
+                                    onChange = {(e) => setConfirmPassword(e.target.value)}
                                     required
                                     className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                     placeholder="Confirm Password"
@@ -108,6 +118,9 @@ export default function SignUpForm() {
                             <button
                                 type="submit"
                                 className="relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-5 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                }}  
                             >
                                 Sign Up
                             </button>
