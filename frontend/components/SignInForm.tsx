@@ -1,4 +1,41 @@
+import {useState} from 'react';
+import {useRouter} from "next/router"
+import Cookies from "js-cookie"
+
 export default function SignInForm() {
+    const router = useRouter()
+
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+
+    const handleSignin = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        try {
+        const response = await fetch('http://127.0.0.1:8000/users/signin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: username, password: password })
+        });
+
+        if (response.ok) {
+            // handle successful login
+            alert("successful sign in")
+            // const { accessToken, refreshToken } = await response.json();
+            const { accessToken } = await response.json();
+            localStorage.setItem('accessToken', accessToken);
+            // Cookies.set('refreshToken', refreshToken, { expires: 7 })
+            router.push("/")
+        } else {
+            setUsername("")
+            setPassword("")
+            alert("not successful in signing in")
+        }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+
     return (
       <>
         <div className="min-h-screen bg-gray-100">
@@ -21,7 +58,7 @@ export default function SignInForm() {
                             if you have not signed up for an account!
                         </p>
                     </div>
-                    <form className="mt-8 space-y-6" action="#" method="POST">
+                    <form className="mt-8 space-y-6" onSubmit={handleSignin}>
                         <input type="hidden" name="remember" defaultValue="true" />
                         <div className="rounded-md shadow-sm">
                             <div className="my-5">
@@ -31,8 +68,9 @@ export default function SignInForm() {
                                 <input
                                     id="username"
                                     name="username"
-                                    type="username"
-                                    autoComplete="username"
+                                    type="text"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
                                     required
                                     className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                     placeholder="Username"
@@ -47,7 +85,8 @@ export default function SignInForm() {
                                     id="password"
                                     name="password"
                                     type="password"
-                                    
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     required
                                     className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                     placeholder="Password"
