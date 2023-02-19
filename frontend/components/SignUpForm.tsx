@@ -2,10 +2,31 @@ import {useState} from "react"
 
 export default function SignUpForm() {
 
+    // To do: Implement front-end validation of form first before sending to backend
+    // Also to do: Backend validation of form
+
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const [email, setEmail] = useState("")
+    const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        try {
+            const response = await fetch('http://127.0.0.1:8000/users/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: username, password: password, email: email })
+            });
+
+            if (response.ok) {
+                alert("signup successful")
+            } else {
+                alert("something must've went wrong")
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
     
     return (
       <>
@@ -29,7 +50,7 @@ export default function SignUpForm() {
                             if you already have an account
                         </p>
                     </div>
-                    <form className="mt-8 space-y-6" action="#" method="POST">
+                    <form className="mt-8 space-y-6" onSubmit={handleSignup}>
                         <input type="hidden" name="remember" defaultValue="true" />
                         <div className="rounded-md shadow-sm">
                             <div className="my-5">
@@ -39,7 +60,7 @@ export default function SignUpForm() {
                                 <input
                                     id="username"
                                     name="username"
-                                    type="username"
+                                    type="text"
                                     value={username}
                                     onChange = {(e) => setUsername(e.target.value)}
                                     required
@@ -94,33 +115,12 @@ export default function SignUpForm() {
                             </div>
                         </div>
             
-                        {/* <div className="flex items-center justify-between">
-                            <div className="flex items-center">
-                            <input
-                                id="remember-me"
-                                name="remember-me"
-                                type="checkbox"
-                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                            />
-                            <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                                Remember me
-                                </label>
-                            </div>
-            
-                            <div className="text-sm">
-                            <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-                                Forgot your password?
-                            </a>
-                            </div>
-                        </div> */}
+                        
             
                         <div className="py-5">
                             <button
                                 type="submit"
                                 className="relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-5 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                                onClick={(e) => {
-                                    e.preventDefault()
-                                }}  
                             >
                                 Sign Up
                             </button>

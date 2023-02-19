@@ -1,50 +1,37 @@
 const bcrypt = require('bcrypt');
-
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-
-const db = require('../db/index.jsx')
+const db = require('../db/index.js')
 
 
 const handleLogin = async (req, res) => {
 
     username = req.body.username
     password = req.body.password
-
     if (!username || !password) {
-        return res.status(400).json({ 'message': 'Username and password are required.' });
+        return res.status(400).json({ 'message': 'Username and Password required.' });
     }
 
-    const {rows} = await db.query('SELECT * FROM users WHERE username = $1', [user])
+    const {rows} = await db.query('SELECT * FROM users WHERE username = $1', [username])
     const foundUser = rows[0]
 
     if (!foundUser) return res.sendStatus(401); //Unauthorized 
-    // evaluate password 
-    const match = await bcrypt.compare(pwd, foundUser.password);
+    const match = await bcrypt.compare(password, foundUser.password);
     if (match) {
         // create JWTs
         const accessToken = jwt.sign(
-            { "username": foundUser.username },
-            process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '30s' } // change to 15 minutes
+            { "userId": foundUser.id },
+            process.env.ACCESS_TOKEN_SECRET
         );
-        const refreshToken = jwt.sign(
-            { "username": foundUser.username },
-            process.env.REFRESH_TOKEN_SECRET,
-            { expiresIn: '1d' }
-        );
-
-        // Saving refreshToken with current user
-        // const otherUsers = usersDB.users.filter(person => person.username !== foundUser.username);
-        // const currentUser = { ...foundUser, refreshToken };
-        // usersDB.setUsers([...otherUsers, currentUser]);
-        // await fsPromises.writeFile(
-        //     path.join(__dirname, '..', 'model', 'users.json'),
-        //     JSON.stringify(usersDB.users)
+        // const refreshToken = jwt.sign(
+        //     { "userId": foundUser.id },
+        //     process.env.REFRESH_TOKEN_SECRET,
+        //     { expiresIn: '1d' }
         // );
         
-        res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000 });
-        res.json({ accessToken });
+        // res.cookie('refreshToken', refreshToken, { httpOnly: true, sameSite: false, secure: true, maxAge: 24 * 60 * 60 * 1000 });
+        
+        res.json({ accessToken: accessToken });
     } else {
         res.sendStatus(401);
     }

@@ -1,5 +1,8 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { Popover, Transition } from '@headlessui/react'
+import Cookies from "js-cookie"
+
+
 import {
   ArrowPathIcon,
   Bars3Icon,
@@ -79,7 +82,47 @@ function classNames(...classes: string[]) {
 }
 
 export default function Header() {
-    let [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [user, setUser] = useState<any>(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(true);
+    
+
+    useEffect(() => {
+        async function fetchUser() {
+            const accessToken = localStorage.getItem('accessToken');
+            if (!accessToken) return;
+
+            try {
+                const response = await fetch('http://localhost:8000/users/dashboard', {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                });
+                if (response) {
+                    const data = await response.json()
+                    setUser(data)
+                    setIsLoggedIn(true)
+                }
+                
+            } catch (error) {                
+                console.log("not logged in")
+            }
+        }
+        if (isLoggedIn) {
+            fetchUser();
+        }
+        
+    }, [isLoggedIn]);
+
+    const handleLogout = async () => {
+        localStorage.removeItem('accessToken');
+        setIsLoggedIn(false);
+        setUser(null);
+    }
+    
+    
+    
 
     return (
         <Popover className="relative bg-white">
@@ -246,17 +289,29 @@ export default function Header() {
                 )}
                 </Popover>
                 </Popover.Group>
-                <div className="hidden items-center justify-end md:flex md:basis-1/4 lg:w-0">
-                    <a href="/signin" className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
-                    Sign in
-                    </a>
-                    <a
-                    href="/signup"
-                    className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                    >
-                    Sign up
-                    </a>
-                </div>
+
+                {user ? (
+                    <div className="hidden items-center justify-end md:flex md:basis-1/4 lg:w-0">
+                        <h1>Welcome, {user.username}!</h1>
+                        <button onClick={handleLogout} className="ml-8 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
+                            Log out
+                        </button>
+                    </div>
+                ) : (
+                    <div className="hidden items-center justify-end md:flex md:basis-1/4 lg:w-0">
+                        <a href="/signin" className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
+                            Sign in
+                        </a>
+                        <a
+                            href="/signup"
+                            className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                        >
+                            Sign up
+                        </a>
+                    </div>
+                )}
+                
+                
             </div>
         </div>
 
@@ -322,18 +377,27 @@ export default function Header() {
                     ))}
                 </div>
                 <div>
-                    <a
-                    href="#"
-                    className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                    >
-                    Sign up
-                    </a>
-                    <p className="mt-6 text-center text-base font-medium text-gray-500">
-                    Existing customer?{' '}
-                    <a href="#" className="text-indigo-600 hover:text-indigo-500">
-                        Sign in
-                    </a>
-                    </p>
+                    {user? (
+                        <div>
+                        <h1>Welcome, {user.username}!</h1>
+                        </div>
+                    ) : (
+                        <div>
+                        <a
+                            href="#"
+                            className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                        >
+                            Sign up
+                        </a>
+                        <p className="mt-6 text-center text-base font-medium text-gray-500">
+                            Existing customer?{' '}
+                        <a href="#" className="text-indigo-600 hover:text-indigo-500">
+                            Sign in
+                        </a>
+                        </p>
+                        </div>
+                    )}
+                    
                 </div>
                 </div>
             </div>
@@ -342,3 +406,4 @@ export default function Header() {
         </Popover>
     )
 }
+
