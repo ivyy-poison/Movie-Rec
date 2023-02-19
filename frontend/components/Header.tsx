@@ -106,7 +106,8 @@ export default function Header() {
                 }
                 
             } catch (error) {                
-                console.log("not logged in")
+                console.log(error)
+                console.log("testing")
             }
         }
         if (isLoggedIn) {
