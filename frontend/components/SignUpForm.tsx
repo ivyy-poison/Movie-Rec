@@ -1,7 +1,8 @@
 import {useState} from "react"
+import {useRouter} from "next/router"
 
 export default function SignUpForm() {
-
+    const router = useRouter()
     // To do: Implement front-end validation of form first before sending to backend
     // Also to do: Backend validation of form
 
@@ -11,22 +12,45 @@ export default function SignUpForm() {
     const [email, setEmail] = useState("")
     const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        try {
-            const response = await fetch('http://127.0.0.1:8000/users/signup', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: username, password: password, email: email })
-            });
+        // try {
+        //     const response = await fetch('http://127.0.0.1:8000/users/signup', {
+        //         method: 'POST',
+        //         headers: { 'Content-Type': 'application/json' },
+        //         body: JSON.stringify({ username: username, password: password, email: email })
+        //     });
 
+        //     if (response.ok) {
+        //         alert("signup successful")
+        //     } else {
+        //         alert("something must've went wrong")
+        //     }
+        // } catch (error) {
+        //     console.error(error);
+        // }
+
+        fetch("http://localhost:8000/users/signup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({username: username, password: password, email: email, confirmPassword: confirmPassword})
+        }).then((response) => {
             if (response.ok) {
-                alert("signup successful")
+                alert("successful sign in")
+                router.push("/signin")
             } else {
-                alert("something must've went wrong")
-            }
-        } catch (error) {
-            console.error(error);
-        }
+                return response.json().then(data => {
+                    throw {messages: data.message, code: 400}
+                })
+                    
+            } 
+        }).catch((error) => {
+            
+            console.log(error.messages)
+            alert("there are issues with your input")
+        })
     };
+    
     
     return (
       <>
