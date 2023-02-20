@@ -1,8 +1,9 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const db = require('../models/index.js')
+const db = require('../models/db.js')
 const {createNewUser, getUser, updateUser, deleteUser, checkUsername} = require('../models/users.js')
+const { body, validationResult } = require('express-validator');
 
 
 const handleLogIn = async (req, res) => {
@@ -79,6 +80,5 @@ const getDashboard = async (req, res) => {
     }
 }
 
-// const viewProfile
 
 module.exports = { handleLogIn, verifyJWT, handleSignUp, getDashboard };

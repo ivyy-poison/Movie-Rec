@@ -1,4 +1,4 @@
-const db = require("./index.js")
+const db = require("./db.js")
 const bcrypt = require("bcrypt")
 
 // Data validation can also be done here //
@@ -22,14 +22,7 @@ const getUser = async (id) => {
     })
 }
 
-const checkUsername = async (username) => {
-    return db.query(
-        "SELECT * FROM users WHERE username = $1",
-        [username]
-    ).then((result) => {
-        return result.rows[0]
-    })
-}
+
 
 const updateUser = async (id, username, email, password) => {
     const hashedPwd = bcrypt.hashSync(password, 10)
@@ -50,4 +43,24 @@ const deleteUser = async (id) => {
     })
 }
 
-module.exports = { createNewUser, getUser, updateUser, deleteUser, checkUsername }
+
+
+const checkUsername = async (username) => {
+    return db.query(
+        "SELECT * FROM users WHERE username = $1",
+        [username]
+    ).then((result) => {
+        return result.rows[0]
+    })
+}
+
+const checkEmail = async (email) => {
+    return db.query(
+        "SELECT * FROM users WHERE email = $1",
+        [email]
+    ).then((result) => {
+        return result.rows[0]
+    })
+}
+
+module.exports = { createNewUser, getUser, updateUser, deleteUser, checkUsername, checkEmail }
