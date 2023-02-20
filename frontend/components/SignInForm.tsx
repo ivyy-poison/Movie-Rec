@@ -10,29 +10,32 @@ export default function SignInForm() {
 
     const handleSignin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        try {
-        const response = await fetch('http://127.0.0.1:8000/users/signin', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: username, password: password })
-        });
+        console.log("sent something")
 
-        if (response.ok) {
-            // handle successful login
+        fetch("http://localhost:8000/users/signin", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({username: username, password: password})
+        }).then((response) => {
+            if (response.ok) {
+                return response.json()
+            } else {
+                return response.json().then(data => {
+                    throw {messages: data.message, code: 400}
+                })
+                    
+            } 
+        }).then((data) => {
             alert("successful sign in")
-            // const { accessToken, refreshToken } = await response.json();
-            const { accessToken } = await response.json();
-            localStorage.setItem('accessToken', accessToken);
-            // Cookies.set('refreshToken', refreshToken, { expires: 7 })
+            localStorage.setItem('accessToken', data.accessToken);
             router.push("/")
-        } else {
-            setUsername("")
-            setPassword("")
-            alert("not successful in signing in")
-        }
-        } catch (error) {
-            console.error(error);
-        }
+        }).catch((error) => {
+            
+            console.log(error.messages)
+            alert("there are issues with your input")
+        })
     };
 
 

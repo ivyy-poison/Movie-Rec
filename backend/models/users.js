@@ -1,7 +1,7 @@
 const db = require("./db.js")
 const bcrypt = require("bcrypt")
 
-// Data validation can also be done here //
+
 
 const createNewUser = async (username, email, password) => {
     const hashedPwd = bcrypt.hashSync(password, 10)
@@ -42,7 +42,6 @@ const deleteUser = async (id) => {
         return result.rows[0]
     })
 }
-
 
 
 const checkUsername = async (username) => {

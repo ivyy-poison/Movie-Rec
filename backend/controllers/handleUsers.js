@@ -9,12 +9,7 @@ const { body, validationResult } = require('express-validator');
 const handleLogIn = async (req, res) => {
     const { username, password } = req.body
     
-    if (!username || !password) {
-        return res.status(400).json({ 'message': 'Username and Password required.' });
-    }
-
     const foundUser = await checkUsername(username)
-    
     if (!foundUser) return res.status(401).json({ message: "No such username exist in our database"}); //Unauthorized 
     const match = await bcrypt.compare(password, foundUser.password);
     if (match) {
@@ -54,7 +49,7 @@ const verifyJWT = (req, res, next) => {
 
 const handleSignUp = async (req, res) => {
     const {username, email, password} = req.body
-    const existing = checkUsername(username)
+    const existing = await checkUsername(username)
     if (!existing) {
         createNewUser(username, email, password)
         .then((result) => {
