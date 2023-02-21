@@ -3,7 +3,7 @@ const router = express.Router()
 const { handleLogIn, verifyJWT, handleSignUp, getDashboard } = require("../controllers/handleUsers.js")
 const { checkUserSignUp, checkUserSignIn } = require("../controllers/validateUser.js")
 // const { checkSchema, body, validationResult } = require('express-validator');
-router.use(express.json())
+// router.use(express.json())
 
 router.get("/dashboard", verifyJWT, getDashboard)
 // router.route("/:id/details").get(verifyJWT, ).put(verifyJWT, ).delete(verifyJWT, ).update(verifyJWT, )
