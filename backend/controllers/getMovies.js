@@ -16,4 +16,6 @@ const getMovieById = async (req, res) => {
     })
 }
 
+// getRecommendation, getSimilarById, getPopular?
+
 module.exports = {getMovieById}

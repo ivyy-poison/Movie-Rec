@@ -1,33 +1,20 @@
-import {useState} from "react"
+import {useState, useContext} from "react"
 import {useRouter} from "next/router"
+
 
 export default function SignUpForm() {
     const router = useRouter()
+ 
     // To do: Implement front-end validation of form first before sending to backend
-    // Also to do: Backend validation of form
+
 
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const [email, setEmail] = useState("")
+    
     const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        // try {
-        //     const response = await fetch('http://127.0.0.1:8000/users/signup', {
-        //         method: 'POST',
-        //         headers: { 'Content-Type': 'application/json' },
-        //         body: JSON.stringify({ username: username, password: password, email: email })
-        //     });
-
-        //     if (response.ok) {
-        //         alert("signup successful")
-        //     } else {
-        //         alert("something must've went wrong")
-        //     }
-        // } catch (error) {
-        //     console.error(error);
-        // }
-
         fetch("http://localhost:8000/users/signup", {
             method: "POST",
             headers: {
