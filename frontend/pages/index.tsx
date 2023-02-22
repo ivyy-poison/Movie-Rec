@@ -1,13 +1,20 @@
 import type { NextPage } from 'next'
+import { Fragment, useState, useEffect } from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
-import Header from '../components/Header'
+import Navbar from '../components/Navbar'
 
 
 const Home: NextPage = () => {
+
+  const [user, setUser] = useState<any>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+
   return (
     <>
-    <Header></Header>
+
+    <Navbar></Navbar>
 
     <div className="flex min-h-screen flex-col items-center justify-center py-2">
       <Head>

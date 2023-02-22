@@ -1,10 +1,11 @@
-import {useState} from 'react';
+import {useState, useContext} from 'react';
 import {useRouter} from "next/router"
 import Cookies from "js-cookie"
+import { LoginContext } from '../pages/_app';
 
 export default function SignInForm() {
     const router = useRouter()
-
+    const {loggedIn, setLoggedIn, user, setUser} = useContext(LoginContext)
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
@@ -28,11 +29,33 @@ export default function SignInForm() {
                     
             } 
         }).then((data) => {
-            alert("successful sign in")
+            setLoggedIn(true)
             localStorage.setItem('accessToken', data.accessToken);
-            router.push("/")
-        }).catch((error) => {
             
+        }).then(() => {
+            fetch("http://localhost:8000/users/me", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem('accessToken')}`
+                }
+            }).then((response) => {
+                if (response.ok) {
+                    response.json().then(user => {
+                        // console.log(user)
+                        setUser({username: user.username, email: user.email, id: user.id})
+                        alert("successful sign in")
+                        router.push("/")
+                    
+                    })
+                } else {
+                    return response.json().then(data => {
+                        throw {messages: data.message, code: 400}
+                    })
+                        
+                }
+            })
+        }).catch((error) => {
             console.log(error.messages)
             alert("there are issues with your input")
         })
