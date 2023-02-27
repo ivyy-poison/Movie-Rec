@@ -9,25 +9,9 @@ import MovieCard from '../components/MovieCard'
 
 const Home: NextPage = () => {
 
-  const [user, setUser] = useState<any>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [popularMovies, setPopularMovies] = useState<any>([]);
 
-  // fetch("http://localhost:8000/movies/popular", {
-  //   method: "GET",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   }}).then((response) => {
-  //     if (response.ok) {
-  //       response.json().then(data => {
-  //         setPopularMovies(data.results)
-  //         console.log(data.results)
-  //       })
-  //     } else {
-  //       throw {messages: "error", code: 400}
-  //   }}).catch((error) => {
-  //     console.log(error.messages)
-  // })
+
   useEffect(() => {
     async function fetchPopularMovies() {
       const response = await fetch("http://localhost:8000/movies/popular", {
@@ -38,7 +22,6 @@ const Home: NextPage = () => {
       const data = await response.json()
       setPopularMovies(data.results)
     }
-    console.log("here")
     fetchPopularMovies()
     console.log(popularMovies)
   }, [])
@@ -52,6 +35,7 @@ const Home: NextPage = () => {
           title={movie.title}
           imageUrl={"https://image.tmdb.org/t/p/w300/" + movie.poster_path}
           releaseYear={movie.release_date.slice(0, 4)}
+          overview = {movie.overview}
         ></MovieCard>
       </div>
 
@@ -74,7 +58,6 @@ const Home: NextPage = () => {
         <h1 className="text-6xl font-bold pb-20">Find out what's popular</h1>
         <div className="flex flex-wrap gap-4 justify-center items-center"> 
           {displayPopularMovies}
-          
         </div>
         
       </main>
