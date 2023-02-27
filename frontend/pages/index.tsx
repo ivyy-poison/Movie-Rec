@@ -30,8 +30,9 @@ const Home: NextPage = () => {
 
   const displayPopularMovies = popularMovies.map((movie: any) => {
     return (
-      <div className="">
+      <div key={movie.id} className="">
         <MovieCard
+          movieId={movie.id}
           title={movie.title}
           imageUrl={"https://image.tmdb.org/t/p/w300/" + movie.poster_path}
           releaseYear={movie.release_date.slice(0, 4)}
