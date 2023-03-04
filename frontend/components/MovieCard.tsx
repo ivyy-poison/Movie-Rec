@@ -32,26 +32,26 @@ export default function MovieCard(props: movieCardDetails) {
     async function handleRate() {
         console.log("submitted rating of " + rating)
         console.log(movieId, user.id, rating)
-        // fetch("http://localhost:8000/movies/rate", {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //         "Authorization": `Bearer ${localStorage.getItem('accessToken')}`
-        //     },
-        //     body: JSON.stringify({movieId: movieId, rating: rating, userId: user.id})
-        // }).then((response) => {
-        //     if (response.ok) {
-        //         console.log("Rating submitted")
-        //         return response.json()
-        //     } else {
-        //         return response.json().then(data => {
-        //             throw {messages: data.message, code: 400}
-        //         })
+        fetch("http://localhost:8000/movies/rate", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem('accessToken')}`
+            },
+            body: JSON.stringify({movieId: movieId, rating: rating, userId: user.id})
+        }).then((response) => {
+            if (response.ok) {
+                console.log("Rating submitted")
+                return response.json()
+            } else {
+                return response.json().then(data => {
+                    throw {messages: data.message, code: 400}
+                })
                     
-        //     } 
-        // }).catch((error) => {
-        //     console.log(error.messages)
-        // })
+            } 
+        }).catch((error) => {
+            console.log(error.messages)
+        })
     }
 
     

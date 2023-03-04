@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
 import MovieCard from '../components/MovieCard'
-
+  
 
 const Home: NextPage = () => {
 

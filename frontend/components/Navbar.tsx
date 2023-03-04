@@ -20,6 +20,7 @@ export default function Navbar() {
 
     const {loggedIn, setLoggedIn, user, setUser} = useContext(LoginContext)
     const handleLogout = async () => {
+        console.log("logging out")
         localStorage.removeItem('accessToken');
         setLoggedIn(false);
         setUser(null);
