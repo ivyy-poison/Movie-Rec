@@ -15,7 +15,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     console.log("loggedIn changed to " + loggedIn)
-    fetch("http://localhost:8000/users/me", {
+    fetch("http://localhost:8000/users/dashboard", {
       method: "GET",
       headers: {
           "Content-Type": "application/json",

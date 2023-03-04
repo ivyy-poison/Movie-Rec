@@ -2,7 +2,6 @@ const db = require("./db.js")
 const bcrypt = require("bcrypt")
 
 
-
 const createNewUser = async (username, email, password) => {
     const hashedPwd = bcrypt.hashSync(password, 10)
     return db.query(

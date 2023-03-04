@@ -32,7 +32,8 @@ export default function MovieCard(props: movieCardDetails) {
     async function handleRate() {
         console.log("submitted rating of " + rating)
         console.log(movieId, user.id, rating)
-        fetch("http://localhost:8000/movies/rate", {
+        const url = "http://localhost:8000/movies/" + movieId + "/rating"
+        fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -40,6 +41,7 @@ export default function MovieCard(props: movieCardDetails) {
             },
             body: JSON.stringify({movieId: movieId, rating: rating, userId: user.id})
         }).then((response) => {
+            console.log(response)
             if (response.ok) {
                 console.log("Rating submitted")
                 return response.json()
@@ -50,6 +52,7 @@ export default function MovieCard(props: movieCardDetails) {
                     
             } 
         }).catch((error) => {
+            console.log("here?")
             console.log(error.messages)
         })
     }
@@ -89,7 +92,7 @@ export default function MovieCard(props: movieCardDetails) {
                                                         rating={rating}
                                                         starRatedColor="blue"
                                                         changeRating={(v:number) => setRating(v)}
-                                                        numberOfStars={6}
+                                                        numberOfStars={5}
                                                         name='rating'
                                                     />
                                                     

@@ -11,7 +11,6 @@ const Home: NextPage = () => {
 
   const [popularMovies, setPopularMovies] = useState<any>([]);
 
-
   useEffect(() => {
     async function fetchPopularMovies() {
       const response = await fetch("http://localhost:8000/movies/popular", {
@@ -26,8 +25,6 @@ const Home: NextPage = () => {
     console.log(popularMovies)
   }, [])
     
-
-
   const displayPopularMovies = popularMovies.map((movie: any) => {
     return (
       <div key={movie.id} className="">
