@@ -6,13 +6,12 @@ export default function SignUpForm() {
     const router = useRouter()
  
     // To do: Implement front-end validation of form first before sending to backend
-
-
+    
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const [email, setEmail] = useState("")
-    
+
     const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         fetch("http://localhost:8000/users/signup", {
@@ -23,7 +22,7 @@ export default function SignUpForm() {
             body: JSON.stringify({username: username, password: password, email: email, confirmPassword: confirmPassword})
         }).then((response) => {
             if (response.ok) {
-                alert("successful sign in")
+                alert("successful sign u[")
                 router.push("/signin")
             } else {
                 return response.json().then(data => {

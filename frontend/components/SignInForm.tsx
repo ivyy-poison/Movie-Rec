@@ -11,8 +11,6 @@ export default function SignInForm() {
 
     const handleSignin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log("sent something")
-
         fetch("http://localhost:8000/users/signin", {
             method: "POST",
             headers: {
@@ -26,7 +24,6 @@ export default function SignInForm() {
                 return response.json().then(data => {
                     throw {messages: data.message, code: 400}
                 })
-                    
             } 
         }).then((data) => {
             setLoggedIn(true)
@@ -39,22 +36,20 @@ export default function SignInForm() {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${localStorage.getItem('accessToken')}`
                 }
-            }).then((response) => {
-                if (response.ok) {
-                    response.json().then(user => {
-                        // console.log(user)
-                        setUser({username: user.username, email: user.email, id: user.id})
-                        alert("successful sign in")
-                        router.push("/")
+        }).then((response) => {
+            if (response.ok) {
+                response.json().then(user => {
+                    setUser({username: user.username, email: user.email, id: user.id})
+                    alert("successful sign in")
+                    router.push("/")
+                })
+            } else {
+                return response.json().then(data => {
+                    throw {messages: data.message, code: 400}
+                })
                     
-                    })
-                } else {
-                    return response.json().then(data => {
-                        throw {messages: data.message, code: 400}
-                    })
-                        
-                }
-            })
+            }
+        })
         }).catch((error) => {
             console.log(error.messages)
             alert("there are issues with your input")

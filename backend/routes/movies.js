@@ -1,8 +1,8 @@
 const express = require("express")
 const router = express.Router()
-const { getMovieById } = require("../controllers/getMovies.js")
+const { getMovieById, getPopularMovies } = require("../controllers/getMovies.js")
 
 router.get("/:id", getMovieById)
-
+router.get("/popular", getPopularMovies)
 
 module.exports = router
