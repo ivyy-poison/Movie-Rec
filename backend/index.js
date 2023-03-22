@@ -5,9 +5,14 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const userRouter = require("./routes/users.js")
 const movieRouter = require("./routes/movies.js")
+const corsOptions = {
+    credentials: true,
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'PUT', 'POST', 'DELETE']
+};
 
 // Middleware used //
-app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
+app.use(cors(corsOptions));
 app.use(cookieParser())
 app.use(express.json())
 // Middleware used //

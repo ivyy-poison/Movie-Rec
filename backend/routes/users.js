@@ -1,19 +1,15 @@
+const { handleLogIn,
+        verifyJWT, 
+        handleSignUp, 
+        getDashboard } = require("../controllers/handleUsers.js")
+const { checkUserSignUp, checkUserSignIn } = require("../controllers/validateUser.js")
+
 const express = require("express")
 const router = express.Router()
-const { handleLogIn, verifyJWT, handleSignUp, getDashboard } = require("../controllers/handleUsers.js")
-const { checkUserSignUp, checkUserSignIn } = require("../controllers/validateUser.js")
-// const { checkSchema, body, validationResult } = require('express-validator');
-// router.use(express.json())
 
-router.get("/me", verifyJWT, getDashboard)
-// router.route("/:id/details").get(verifyJWT, ).put(verifyJWT, ).delete(verifyJWT, ).update(verifyJWT, )
-// users/:id/movies is a route that will be used to add movies to a user's list
-
-
+router.get("/dashboard", verifyJWT, getDashboard)
 router.post("/signup", checkUserSignUp(), handleSignUp)
 router.post("/signin", checkUserSignIn(), handleLogIn)
-
-
 
 
 // router.post("/refresh-token", (req, res) => {

@@ -28,7 +28,6 @@ export default function SignUpForm() {
                 return response.json().then(data => {
                     throw {messages: data.message, code: 400}
                 })
-                    
             } 
         }).catch((error) => {
             
