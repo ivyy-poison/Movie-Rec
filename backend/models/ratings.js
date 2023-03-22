@@ -1,7 +1,6 @@
 const db = require("./db.js")
 
 const createNewRating = async (movieId, userId, rating) => {
-    console.log("error here?")
     return db.query(
         "INSERT INTO ratings (\"movieId\", \"userId\", rating) VALUES ($1, $2, $3) RETURNING *",
         [movieId, userId, rating]
@@ -20,6 +19,7 @@ const updateRating = async (movieId, userId, rating) => {
 }
 
 const deleteRating = async (movieId, userId) => {
+    // console.log("This command is being ran")
     return db.query(
         "DELETE FROM ratings WHERE \"movieId\" = $1 AND \"userId\" = $2 RETURNING *",
         [movieId, userId]
@@ -33,7 +33,12 @@ const getRating = async (movieId, userId) => {
         "SELECT * FROM ratings WHERE \"movieId\" = $1 AND \"userId\" = $2",
         [movieId, userId]
     ).then((result) => {
-        return result.rows[0]
+        if (result.rows[0]) {
+            return {message:"Rating exists", rating: result.rows[0]}
+        } else {
+            return {message:"Rating does not exist"}
+        }
+
     })
 }
 

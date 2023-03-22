@@ -1,4 +1,4 @@
-import {Fragment, useState, useRef, useContext} from 'react'
+import {Fragment, useState, useRef, useContext, useEffect} from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { LoginContext } from '../pages/_app';
 import StarRatings from 'react-star-ratings'
@@ -16,45 +16,90 @@ export default function MovieCard(props: movieCardDetails) {
 
     const cancelButtonRef = useRef(null)
     const [open, setOpen] = useState(false)
-
     const [rating, setRating] = useState(0)
+    const {movieId, title, imageUrl, releaseYear, overview} = props
 
-    const movieId = props.movieId
-    const title = props.title
-    const imageUrl = props.imageUrl
-    const releaseYear = props.releaseYear
-    const overview = props.overview
+    const {loggedIn, user } = useContext(LoginContext)
+    const [hasRated, setHasRated] = useState(false)
+    // const [previousRatingId, setPreviousRatingId] = useState(null)
 
-    const {loggedIn, setLoggedIn, user, setUser} = useContext(LoginContext)
+    useEffect(() => {
+        if (open) {
+            fetchRating()
+        }
+    }, [open])
+    
 
-    // function updateRating()
-
-    async function handleRate() {
-        console.log("submitted rating of " + rating)
-        console.log(movieId, user.id, rating)
+    async function handleRating() {
         const url = "http://localhost:8000/movies/" + movieId + "/rating"
+        const method = hasRated ? "PUT" : "POST"
+        console.log(`submitted rating of ${rating} using the ${method} method`)
         fetch(url, {
-            method: "POST",
+            method: method,
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${localStorage.getItem('accessToken')}`
             },
             body: JSON.stringify({movieId: movieId, rating: rating, userId: user.id})
         }).then((response) => {
-            console.log(response)
             if (response.ok) {
                 console.log("Rating submitted")
                 return response.json()
             } else {
                 return response.json().then(data => {
                     throw {messages: data.message, code: 400}
-                })
-                    
+                })      
             } 
         }).catch((error) => {
-            console.log("here?")
             console.log(error.messages)
         })
+    }
+
+    async function handleDeleteRating() {
+        if (!hasRated) return;
+        const url = `http://localhost:8000/movies/${movieId}/rating/`;
+        fetch(url, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+        }).then((response) => {
+            if (response.ok) {
+                setRating(0);
+                setHasRated(false);
+                return response.json().then((data) => {
+                    console.log(data.message)
+                });
+            } else {
+                throw new Error("Failed to delete rating");
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }
+
+    async function fetchRating() {
+        const url = `http://localhost:8000/movies/${movieId}/rating`
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        })
+        const data = await response.json()
+        
+        console.log(data)
+        if (data.rating) {
+            setHasRated(true)
+            setRating(data.rating.rating)
+            // setPreviousRatingId(data.rating.id)
+        } else {
+            setHasRated(false)
+            setRating(0)
+        }
     }
 
     
@@ -72,8 +117,7 @@ export default function MovieCard(props: movieCardDetails) {
                             <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-6xl">
                                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                     <div className="sm:flex sm:items-start">
-                                        <div className="flex basis-1/4 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-80 sm:w-10 ">
-                                            {/* <ExclamationTriangleIcon className="h-6 w-6 text-red-600" aria-hidden="true" /> */}
+                                        <div className="flex basis-1/4 flex-shrink-0 items-center justify-center rounded-full sm:mx-0 sm:h-80 sm:w-10 ">
                                             <img className="w-80 h-80 object-contain object-fit-center" src={imageUrl} alt={title} />
                                         </div>
                                         <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
@@ -116,12 +160,19 @@ export default function MovieCard(props: movieCardDetails) {
                                     <button
                                         type="button"
                                         className="inline-flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
-                                        onClick={handleRate}
+                                        onClick={handleRating}
                                     >
                                     Rate
                                 </button>
-                                )
-                                }
+                                )}
+                                {(hasRated) && (
+                                    <button
+                                    className="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                                    onClick={handleDeleteRating}
+                                    >
+                                    Delete
+                                    </button>
+                                )}
                                 
                                 </div>
                             </Dialog.Panel>

@@ -28,9 +28,8 @@ export default function SignInForm() {
         }).then((data) => {
             setLoggedIn(true)
             localStorage.setItem('accessToken', data.accessToken);
-            
         }).then(() => {
-            fetch("http://localhost:8000/users/me", {
+            fetch("http://localhost:8000/users/dashboard", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -40,6 +39,7 @@ export default function SignInForm() {
             if (response.ok) {
                 response.json().then(user => {
                     setUser({username: user.username, email: user.email, id: user.id})
+                    console.log("successful sign in")
                     alert("successful sign in")
                     router.push("/")
                 })

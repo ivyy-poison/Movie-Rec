@@ -1,10 +1,13 @@
-const express = require("express")
-const router = express.Router()
-const { handleLogIn, verifyJWT, handleSignUp, getDashboard } = require("../controllers/handleUsers.js")
+const { handleLogIn,
+        verifyJWT, 
+        handleSignUp, 
+        getDashboard } = require("../controllers/handleUsers.js")
 const { checkUserSignUp, checkUserSignIn } = require("../controllers/validateUser.js")
 
+const express = require("express")
+const router = express.Router()
 
-router.get("/dashboard", verifyJWT, getDashboard) // This one should eventually change to dashsboard
+router.get("/dashboard", verifyJWT, getDashboard)
 router.post("/signup", checkUserSignUp(), handleSignUp)
 router.post("/signin", checkUserSignIn(), handleLogIn)
 

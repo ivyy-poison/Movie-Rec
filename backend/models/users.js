@@ -21,8 +21,6 @@ const getUser = async (id) => {
     })
 }
 
-
-
 const updateUser = async (id, username, email, password) => {
     const hashedPwd = bcrypt.hashSync(password, 10)
     return db.query(
