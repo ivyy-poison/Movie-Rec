@@ -31,7 +31,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
               })      
           }
         }).catch((error) => {
-            console.log("Test")
+            console.log("Token either does not exist or has expired")
             // This means access token either not exist or expired
         })
     }, [loggedIn])
