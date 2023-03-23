@@ -69,7 +69,7 @@ export default function SignInForm() {
                             alt="Your Company"
                         />
                         <h2 className="m-6 text-center text-4xl font-bold text-gray-900">
-                            Sign up for an account!
+                            Sign in!
                         </h2>
                         <p className="mt-2 text-center text-lg text-gray-600">
                             Or {' '}
@@ -141,7 +141,7 @@ export default function SignInForm() {
                                 type="submit"
                                 className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                             >
-                                Sign Up
+                                Sign in
                             </button>
                         </div>
                 </form> 

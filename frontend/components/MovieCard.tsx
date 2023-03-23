@@ -1,7 +1,8 @@
 import {Fragment, useState, useRef, useContext, useEffect} from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { LoginContext } from '../pages/_app';
+import { LoginContext } from '../pages/_app'
 import StarRatings from 'react-star-ratings'
+import Link from 'next/link'
 
 
 type movieCardDetails = {
@@ -138,6 +139,7 @@ export default function MovieCard(props: movieCardDetails) {
                                                         changeRating={(v:number) => setRating(v)}
                                                         numberOfStars={5}
                                                         name='rating'
+                                                        starDimension="30px"
                                                     />
                                                     
                                                 </div>
@@ -173,13 +175,16 @@ export default function MovieCard(props: movieCardDetails) {
                                     Delete
                                     </button>
                                 )}
-                                <button
-                                    type="button"
-                                    className="inline-flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
-                                    onClick={() =>{}}
-                                >
-                                    Find out more
-                                </button>
+                                <Link href={`/movies/${movieId}`} >
+                                    <button
+                                        type="button"
+                                        className="inline-flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                                        onClick={() =>{}}
+                                    >
+                                        Find out more
+                                    </button>
+                                </Link>
+                                
                                 
                                 </div>
                             </Dialog.Panel>

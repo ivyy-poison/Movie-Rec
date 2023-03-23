@@ -1,6 +1,6 @@
 import {Fragment, useState, useRef, useContext, useEffect} from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { LoginContext } from '../pages/_app';
+import { LoginContext } from '../pages/_app'
 import StarRatings from 'react-star-ratings'
 
 
@@ -9,8 +9,6 @@ type MovieDetails = {
     title: string;
     releaseYear: string;
     imageUrl: string;
-    directors: string[];
-    mainCast: string[];
     overview: string;
 }
 
@@ -42,7 +40,7 @@ export default function MovieInfoPage(props: MovieDetails) {
         })
     }
 
-    const {movieId, title, releaseYear, imageUrl, directors, mainCast, overview} = props
+    const {movieId, title, releaseYear, imageUrl, overview} = props
     
     const [hasRated, setHasRated] = useState(false)
 
@@ -115,6 +113,7 @@ export default function MovieInfoPage(props: MovieDetails) {
                             changeRating={(v) => setRating(v)}
                             numberOfStars={5}
                             name="rating"
+                            starDimension="30px"
                         />
                         {(rating > 0) && (
                             <button
